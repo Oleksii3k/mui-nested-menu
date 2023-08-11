@@ -23,6 +23,7 @@ export type NestedMenuItemProps = Omit<MenuItemProps, "button"> & {
   rightIcon?: ReactNode;
   leftIcon?: ReactNode;
   children?: ReactNode;
+  type?: "vertical" | "horizontal" | "mini";
   className?: string;
   tabIndex?: number;
   disabled?: boolean;
@@ -41,6 +42,7 @@ const NestedMenuItem = forwardRef<HTMLLIElement | null, NestedMenuItemProps>(
       leftIcon = null,
       children,
       className,
+      type,
       tabIndex: tabIndexProp,
       ContainerProps: ContainerPropsProp = {},
       MenuProps,
@@ -155,10 +157,11 @@ const NestedMenuItem = forwardRef<HTMLLIElement | null, NestedMenuItemProps>(
           // from capturing events for clicks and hovers
           style={{ pointerEvents: "none" }}
           anchorEl={menuItemRef.current}
-          anchorOrigin={{
-            horizontal: "right",
-            vertical: "top",
-          }}
+          anchorOrigin={
+            type === "horizontal"
+              ? { horizontal: "left", vertical: "bottom" }
+              : { horizontal: "right", vertical: "top" }
+          }
           transformOrigin={{
             horizontal: "left",
             vertical: "top",

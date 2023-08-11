@@ -4,22 +4,21 @@ import { MenuItemData } from "./MenuItemData";
 import { IconMenuItem } from "./IconMenuItem";
 import { NestedMenuItem } from "./NestedMenuItem";
 
-export interface nestedMenuItemsFromObjectProps {
-  menuItemsData: MenuItemData[];
-  isOpen: boolean;
-  direction?: "right" | "down";
-  handleClose: () => void;
-}
-
 /**
  * Create a JSX element with nested elements creating a nested menu.
  * Every menu item should have a uid provided
  */
-export function nestedMenuItemsFromObject({
-  menuItemsData: items,
+export default function NestedMenu({
+  type,
+  items,
   isOpen,
   handleClose,
-}: nestedMenuItemsFromObjectProps) {
+}: {
+  type?: "vertical" | "horizontal" | "mini";
+  items: MenuItemData[];
+  isOpen: boolean;
+  handleClose: () => void;
+}) {
   return items.map((item) => {
     const {
       leftIcon,
@@ -36,18 +35,19 @@ export function nestedMenuItemsFromObject({
       return (
         <NestedMenuItem
           key={label}
+          type={type}
           leftIcon={leftIcon}
           rightIcon={rightIcon}
-          label={label}
+          label={type === "mini" ? "" : label}
           parentMenuOpen={isOpen}
           sx={sx}
           disabled={disabled}
         >
           {/* Call this function to nest more items */}
-          {nestedMenuItemsFromObject({
+          {NestedMenu({
             handleClose,
             isOpen,
-            menuItemsData: items,
+            items,
           })}
         </NestedMenuItem>
       );
@@ -58,7 +58,7 @@ export function nestedMenuItemsFromObject({
           key={label}
           leftIcon={leftIcon}
           rightIcon={rightIcon}
-          label={label}
+          label={type === "mini" ? "" : label}
           onClick={(event: React.MouseEvent<HTMLElement>) => {
             handleClose();
             callback && callback(event, item);

@@ -45,7 +45,9 @@ export const IconMenuItem = forwardRef<HTMLLIElement, IconMenuItemProps>(
       >
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {leftIcon}
-          <StyledTypography variant="body2">{label}</StyledTypography>
+          {!!label && (
+            <StyledTypography variant="body2">{label}</StyledTypography>
+          )}
         </Box>
         {rightIcon}
       </StyledMenuItem>
